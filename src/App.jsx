@@ -1,9 +1,17 @@
-import {useState} from "react";
+import {useRef, useState} from "react";
 import "./App.css";
+
 
 function App() {
   const [numberToCheck, setNumberToCheck] = useState("");
   const [result, setResult] = useState("");
+  const allElements = useRef(new Set());
+
+  function getClear(allElements) {
+    allElements.current.clear();
+    setResult("");
+    setNumberToCheck("");
+  }
 
   function handleClick() {
     setResult(() => "");
@@ -17,6 +25,7 @@ function App() {
       if (containsChars(numString, numberToCheck)) {
         console.log(`包含${i}`);
         setResult((prevResult) => prevResult + ` ${numString}`,);
+        allElements.current.add(numString);
       }
     }
   }
@@ -51,17 +60,19 @@ function App() {
   }
 
   return (<div>
-      <input
-        type="text"
-        placeholder="请输入一个数字，譬如 02"
-        onChange={(e) => setNumberToCheck(e.target.value)}
-        onKeyDown={(e) => {
-          handleKeyDown(e)
-        }}
-      />
-      <button onClick={() => handleClick()}>开始计算</button>
-      <p>结果：{result}</p>
-    </div>);
+    <input
+      type="text"
+      placeholder="请输入一个数字，譬如 02"
+      onChange={(e) => setNumberToCheck(e.target.value)}
+      onKeyDown={(e) => {
+        handleKeyDown(e)
+      }}
+    />
+    <button onClick={() => handleClick()}>开始计算</button>
+    <p>结果：{result}</p>
+    <p>去重后的所有元素：{Array.from(allElements.current).join(", ")}</p>
+    <button onClick={() => getClear(allElements)}>清空结果</button>
+  </div>);
 }
 
 export default App;
