@@ -70,7 +70,7 @@ function App() {
     />
     <button onClick={() => handleClick()}>开始计算</button>
     <p>结果：{result}</p>
-    <p>去重后的所有元素：{Array.from(allElements.current).join(", ")}</p>
+    <p>去重后的所有元素：{Array.from(allElements.current).sort((a, b) => a - b).join(", ")}</p>
     <button onClick={() => getClear(allElements)}>清空结果</button>
   </div>);
 }
