@@ -17,15 +17,20 @@ function App() {
     setResult(() => "");
     if (isNaN(Number(numberToCheck)) || numberToCheck.length !== 2) {
       alert("请输入一个两位数字");
+      document.getElementById("number-input").value = "";
       return;
     }
+
+    const regex = /^(?!.*(\d).*\1)\d{3}$/;
 
     for (let i = 1; i <= 999; i++) {
       let numString = String(i).padStart(3, "0");
       if (containsChars(numString, numberToCheck)) {
         console.log(`包含${i}`);
         setResult((prevResult) => prevResult + ` ${numString}`,);
-        allElements.current.add(numString);
+        // 我们想要的结果是3位数字都不一样的，只有这样才放进 set 中
+        if (regex.test(numString))
+          allElements.current.add(numString);
       }
     }
   }
@@ -61,6 +66,7 @@ function App() {
 
   return (<div>
     <input
+      id="number-input"
       type="text"
       placeholder="请输入一个数字，譬如 02"
       onChange={(e) => setNumberToCheck(e.target.value)}
